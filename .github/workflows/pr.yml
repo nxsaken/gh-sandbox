@@ -10,10 +10,13 @@ jobs:
       pull-requests: write
     runs-on: ubuntu-latest
     steps:
-      - uses: amannn/action-semantic-pull-request@v5
+      - name: Check PR title
+        uses: amannn/action-semantic-pull-request@v5
+        id: lint_pr_title
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      - uses: marocchino/sticky-pull-request-comment@v2
+      - name: Post error comment
+        uses: marocchino/sticky-pull-request-comment@v2
         if: always() && (steps.lint_pr_title.outputs.error_message != null)
         with:
           header: pr-title-lint-error
@@ -27,11 +30,18 @@ jobs:
             ```
             ${{ steps.lint_pr_title.outputs.error_message }}
             ```
-      - if: ${{ steps.lint_pr_title.outputs.error_message == null }}
+      - name: Delete error comment
+        if: ${{ steps.lint_pr_title.outputs.error_message == null }}
         uses: marocchino/sticky-pull-request-comment@v2
         with:
           header: pr-title-lint-error
           delete: true
+  validate-commits:
+    name: Validate conventional commits
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: webiny/action-conventional-commits@v1.3.0
   label:
     name: Set labels
     permissions:
