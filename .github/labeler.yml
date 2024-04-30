@@ -1,0 +1,6 @@
+documentation:
+  - changed-files:
+      - any-glob-to-any-file: '**/*.md'
+examples:
+  - changed-files:
+      - any-glob-to-any-file: examples/*
