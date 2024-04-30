@@ -12,6 +12,13 @@ permissions:
 env:
   CARGO_TERM_COLOR: always
 jobs:
+  validate-commits:
+    name: Validate commit messages
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Check conventional commits
+        uses: webiny/action-conventional-commits@v1.3.0
   checks:
     runs-on: ubuntu-latest
     timeout-minutes: 45
